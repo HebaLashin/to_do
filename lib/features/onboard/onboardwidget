@@ -3,8 +3,6 @@ import 'package:to_do/core/util/widgets/listviewpage.dart';
 import 'package:to_do/core/util/widgets/mybutton.dart';
 import 'package:to_do/features/addtask/addtaskpage.dart';
 
-
-
 class OnBoardWidget extends StatefulWidget{
   const OnBoardWidget({Key? key}) : super(key: key);
 
@@ -15,37 +13,24 @@ class _OnBoardWidget extends State<OnBoardWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar : AppBar(
-          title : Text('Board',style: TextStyle(fontSize: 18,
+        appBar : AppBar( title : Text('Board',style: TextStyle(fontSize: 18,
               fontWeight: FontWeight.bold)),
           actions: <Widget>[
-        IconButton(
-        icon: Icon(
-          Icons.date_range,
-          color: Colors.white,
-        ),
-        onPressed : (){
-          Navigator.push(context, MaterialPageRoute(
+        IconButton( icon: Icon( Icons.date_range,color: Colors.white,   ),
+        onPressed : (){  Navigator.push(context, MaterialPageRoute(
             builder: (context) =>  AddTaskPage(), ),   );
         }
         ),],),
 
         body: Container (
             margin: EdgeInsets.all(30.0),
-            child:
-        SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-             // margin: EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+          child: Column(  children: <Widget>[
               _tabSection(context),
               MyButton(text : 'Add a Task',
                 onClick : () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>  AddTaskPage(),
-                    ),
-                  );
+                  Navigator.push(  context,MaterialPageRoute(
+                      builder: (context) =>  AddTaskPage(),),);
                 },
               ),
             ],
@@ -66,27 +51,12 @@ Widget _tabSection(BuildContext context) {
             Tab (text : 'UnCompleted'),
             Tab (text : 'Favorite'),
           ],   labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-
-    ),
-        ),
-        Container(
-          //Add this to give height
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          child: TabBarView(children: [
-              const  ListViewPage(),
-            Container(
-              child: Text("2"),
-            ),
-            Container(
-              child: Text("3"),
-            ),
-            Container(
-              child: Text("4"),
-            ),
+              unselectedLabelColor: Colors.grey,),    ),
+        Container(height: MediaQuery.of(context).size.height,
+          child: TabBarView(children: [  const  ListViewPage(),
+            Container(child: Text("2"),),
+            Container(child: Text("3"),),
+            Container(child: Text("4"),),
           ]),
         ),
       ],
@@ -96,64 +66,3 @@ Widget _tabSection(BuildContext context) {
 
 
 
-
-/*
-class OnBoardWidget extends StatelessWidget {
-  const OnBoardWidget({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-     home: DefaultTabController(
-          length : 4,
-          child : Scaffold (
-          appBar : AppBar(
-          //  centerTitle : false,
-            bottom : TabBar(
-              tabs : [
-                Tab (text : 'All'),
-                Tab (text : 'Completed'),
-                Tab (text : 'UnCompleted'),
-                Tab (text : 'Favorite'),
-              ],
-            ),
-            title : Text('Board'),
-            actions: <Widget>[
-          IconButton(
-          icon: Icon(
-            Icons.date_range,
-            color: Colors.white,
-          ),
-              onPressed : (){
-          Navigator.push(context, MaterialPageRoute(
-         builder: (context) =>  AddTaskPage(), ),   );
-    },
-
-            ),]
-          ),
-          body :
-          const TabBarView(
-          children : [
-         const   ListViewPage(),
-           Text ('2'),
-           Text ('3'),
-           Text ('4'),
-          ]
-      ),
-
-        /*
-          MyButton(text : 'Add a Task',
-              onClick : () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>  AddTaskPage(),
-                    ),
-                  );
-              },
-            ),
-           */
-      ),)
-     );
-  }
-}
-*/
