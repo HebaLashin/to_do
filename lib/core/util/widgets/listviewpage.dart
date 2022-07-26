@@ -17,31 +17,17 @@ class _ListViewPage extends State<ListViewPage> {
           body: ListView(
             children: [
            Card( child:   CheckboxListTile(
-                controlAffinity: ListTileControlAffinity.leading,
                 title: Text('I am true now'),
-                value: _checkboxListTile,
-                onChanged: (value) {
+             value: _checkboxListTile,
+
+             onChanged: (value) {
                   setState(() {
                     _checkboxListTile = !_checkboxListTile;
                   });
                 },
               )
           ),
-              Card(
-                  child: ListTile(
-                    title:Text("List Item 1") ,
-                  )
-              ),
-              Card(
-                child: ListTile(
-                  title: Text("List Item 2"),
-                ),
-              ),
-              Card(
-                  child: ListTile(
-                    title: Text("List Item 3"),
-                  )
-              ),
+
             ],
             shrinkWrap: true,
           )

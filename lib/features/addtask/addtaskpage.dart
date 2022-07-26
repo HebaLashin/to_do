@@ -15,7 +15,6 @@ class _AddTaskPage  extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
-        appBar : AppBar(),
         body : AddTaskWidget(),
         ));
   }

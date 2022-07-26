@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:to_do/core/util/widgets/listviewpage.dart';
 import 'package:to_do/core/util/widgets/mybutton.dart';
 import 'package:to_do/features/addtask/addtaskpage.dart';
+import 'package:to_do/features/schedule/schedulepage.dart';
+
+import 'package:to_do/features/schedule/schedulewidget.dart';
+
 
 class OnBoardWidget extends StatefulWidget{
   const OnBoardWidget({Key? key}) : super(key: key);
@@ -13,12 +17,13 @@ class _OnBoardWidget extends State<OnBoardWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar : AppBar( title : Text('Board',style: TextStyle(fontSize: 18,
-              fontWeight: FontWeight.bold)),
+        appBar : AppBar( title : Text('Board',style: TextStyle(fontSize: 18,color: Colors.black,
+              fontWeight: FontWeight.bold)),backgroundColor: Colors.white,
           actions: <Widget>[
-        IconButton( icon: Icon( Icons.date_range,color: Colors.white,   ),
+        IconButton( icon: Icon( Icons.date_range,color: Colors.black,   ),
         onPressed : (){  Navigator.push(context, MaterialPageRoute(
-            builder: (context) =>  AddTaskPage(), ),   );
+            builder: (context) =>  schedulePage(), ),   );
+
         }
         ),],),
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/core/util/blocs/states.dart';
+//import 'package:intl/intl.dart';
 
 import 'package:to_do/core/util/blocs/cubit.dart';
 import 'package:to_do/core/util/widgets/mybutton.dart';
@@ -19,26 +20,28 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
   String remind_selectedItem = '10 min before';
 
   DateTime _selectedDate = DateTime.now();
-
+ // String starttime = "${DateTime.now().hour}".toString()+":"+"${DateTime.now().minute}" .toString();
+  String starttime = "10:10 AM";//DateFormat("hh:mm a").format(DateTime.now()).toString();
+  String endtime = "11.30 PM";
+  bool isstarttime = true;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppBloc, appstates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Scaffold(
+          return
+            //  padding: EdgeInsets.all(16.0),
+               Scaffold(
                   appBar: AppBar(
                     title: Text(
                       "Add Task", style: TextStyle(color: Colors.black),),
-                    backgroundColor: Colors.white70,
+                    backgroundColor: Colors.white,
                     actions: <Widget>[
                       IconButton(
                           alignment: Alignment.topRight,
-                          icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.white,
+                          icon: Icon(Icons.arrow_back_ios,
+                            color: Colors.black,
                           ),
                           onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
@@ -49,7 +52,9 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                   ),
 
                   body:
-                  Container(child:
+                  Container(
+                      padding: EdgeInsets.all(16.0),
+                      child:
                   SingleChildScrollView(child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -77,37 +82,16 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
                         child: TextFormField(
                           decoration: InputDecoration(
-                            hintText: '2021-02-28',
+                            hintText:
+                            "${_selectedDate.year}"+"/"+"${_selectedDate.month}"+"/"+"${_selectedDate.day}",
                             border: OutlineInputBorder(),
-                          ),
+                          suffixIcon:Padding (
+                            padding:  EdgeInsets.all (0.0),
+                          child : Icon ( Icons.date_range)),),
                         onTap: (){
-                      /*      DateTimePicker(
-                            initialValue: '', // initialValue or controller.text can be null, empty or a DateTime string otherwise it will throw an error.
-                            type: DateTimePickerType.date,
-                            dateLabelText: 'Select Date',
-                            firstDate: DateTime(1995),
-                            lastDate: DateTime.now()
-                                .add(Duration(days: 365)), // This will add one year from current date
-                            validator: (value) {
-                              return null;
-                            },
-                            onChanged: (value) {
-                              if (value.isNotEmpty) {
-                                setState(() {
-                                  _selectedDate = value;
-                                });
-                              }
-                            },
-                            // We can also use onSaved
-                            onSaved: (value) {
-                              if (value.isNotEmpty) {
-                                _selectedDate = value;
-                              }
-                            },
-                          ),*/
+                       _getDate();
                           debugPrint ('data clicked');
-                        },)
-                        ,),
+                        }, ), ),
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -128,31 +112,34 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: Row(children: [
-                          Container(width: MediaQuery
-                              .of(context)
-                              .size
-                              .width / 2.5
+                          Container(width: MediaQuery.of(context).size.width / 2.5
                             , child: TextFormField(
                               decoration: InputDecoration(
-                                hintText: '2021-02-28',
-                                //     icon: Icon( Icons.arrow_back_ios, color: Colors.black,),
+                                hintText: starttime ,
                                 border: OutlineInputBorder(),
-                              ),
+                                suffixIcon:Padding (
+                                    padding:  EdgeInsets.all (0.0),
+                                    child : Icon ( Icons.access_alarm)),),
+                            onTap: (){
+                                isstarttime= true;
+                                _gettimeAlart();
+                            },
                             ),),
+
                           Spacer(flex: 1,),
-                          Container(width: MediaQuery
-                              .of(context)
-                              .size
-                              .width / 2.5
-                            , child:
-                            TextFormField(
+                          Container(width: MediaQuery.of(context).size.width / 2.5
+                            , child:TextFormField(
                               decoration: InputDecoration(
-                                hintText: '2021-02-28',
-                                //     icon: Icon( Icons.arrow_back_ios, color: Colors.black,),
+                                hintText: endtime,
                                 border: OutlineInputBorder(),
-                              ),
+                                suffixIcon:Padding (
+                                    padding:  EdgeInsets.all (0.0),
+                                    child : Icon ( Icons.access_alarm)),),
+                              onTap: (){
+                                isstarttime=false;
+                                _gettimeAlart();},
                             ),),
-                        ],),),
+                            ],),),
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -175,7 +162,6 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                               setState(() => remind_selectedItem = value.toString()),
                         )
                         ,),
-
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -210,9 +196,56 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                          //     builder: (context) => OnBoardPage(),),);
                           },
                         ),),],     ),
-                  ))));
+                  )));
         }
 
     );
   }
+
+   _getDate()   async{
+    DateTime? time = await  showDatePicker(context: context,
+        initialDate: _selectedDate,
+        firstDate: DateTime(2000), lastDate: DateTime(2121));
+       if (time !=null){
+       //  AppBloc.get(context).inserttaskData();
+         setState(() {
+           _selectedDate = time;
+           print("choosing a date correctly");
+         });
+       }
+       else {
+         print("error choosing a date");
+
+       }
+  }
+
+  _gettimeAlart() async {
+    var pickedTime  = await showTimePicker(
+        initialEntryMode: TimePickerEntryMode.input,
+        context: context,
+        initialTime: TimeOfDay(hour: 9, minute: 10)
+    );
+    String format_time = pickedTime!.format(context);
+    if (pickedTime == null) {
+      debugPrint("please choose time");
+    } else if (isstarttime == true) {
+      setState(() {
+        starttime = format_time;
+        debugPrint("start time");
+      });
+    }
+    else if (isstarttime == false) {
+        setState(() {
+          endtime = format_time;
+          debugPrint("endtime");
+        });
+      };
+  }
 }
+
+
+
+
+
+
+
