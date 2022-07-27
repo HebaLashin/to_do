@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
     this.width = double.infinity,
     required this.onClick,
     this.radius = 6.0,
-    this.buttonColor = Colors.teal,
+    this.buttonColor = Colors.green,
    }) : super(key: key);
 
   @override

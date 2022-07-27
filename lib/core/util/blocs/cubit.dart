@@ -16,7 +16,6 @@ class AppBloc extends Cubit<appstates> {
 
   static AppBloc get(context) => BlocProvider.of<AppBloc>(context);
 
-  late Database database ;
 
   void initDatabase() async {
     // Get a location using getDatabasesPath
@@ -26,29 +25,34 @@ class AppBloc extends Cubit<appstates> {
     emit(appdatabaseInitialized());
   }
 
-
-  void opendb({required String path,})  {
-    database  = openDatabase(path, version: 1,
-        onCreate: (Database db, int version) {
-           db.execute(
+  late Database database ;
+  void opendb({required String path,}) async {
+      openDatabase(path, version: 1,
+        onCreate: (Database db, int version)async  {
+          await  db.execute(
             'CREATE TABLE task (id INTEGER PRIMARY KEY,title TEXT,date TEXT,starttime TEXT,endtime TEXT,remind TEXT,repeat TEXT)')
                .then((value) {emit(appdatabasetablecreated());
-             });
-           },
+             });           },
         onOpen: (Database db) {
           emit(appdatabaseopenedstate());
           debugPrint("DataBaseOpened");
           database = db;
           gettasksData();
         }
-    ) as Database;
+    );
   }
 
-  //TextEditingController usernameController = TextEditingController();
+
+
+  TextEditingController titlecontroller = TextEditingController();
+  TextEditingController datecontroller = TextEditingController();
+  TextEditingController starttimecontroller = TextEditingController();
+  TextEditingController endtimecontroller = TextEditingController();
   void inserttaskData() async {
     await database.transaction((txn) async {
       await txn.rawInsert(
-          'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("1,2,3,4,5,6")');
+          'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("${titlecontroller.text}","${datecontroller.text}",'
+              '"${starttimecontroller.text}","${endtimecontroller.text}","5","6")');
      // 'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("1","2","3","4","5","6")');
 
       /*
@@ -69,8 +73,11 @@ class AppBloc extends Cubit<appstates> {
   }
 
   List<Map> tasks = [];
-  void gettasksData() async {
+  Future<List<Map>>  gettasksData() async {
     tasks = await database.rawQuery('SELECT * FROM task');
     emit(appDatabasetasks());
+    debugPrint('gettasksData');
+    return tasks;
+
   }
 }

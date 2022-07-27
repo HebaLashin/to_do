@@ -3,8 +3,10 @@ import 'package:to_do/core/util/widgets/listviewpage.dart';
 import 'package:to_do/core/util/widgets/mybutton.dart';
 import 'package:to_do/features/addtask/addtaskpage.dart';
 import 'package:to_do/features/schedule/schedulepage.dart';
-
+import 'package:to_do/core/util/blocs/cubit.dart';
 import 'package:to_do/features/schedule/schedulewidget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:to_do/core/util/blocs/states.dart';
 
 
 class OnBoardWidget extends StatefulWidget{
@@ -16,7 +18,10 @@ class OnBoardWidget extends StatefulWidget{
 class _OnBoardWidget extends State<OnBoardWidget> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  BlocConsumer<AppBloc, appstates>(
+        listener: (context, state) {},
+       builder: (context, state) {
+      return Scaffold(
         appBar : AppBar( title : Text('Board',style: TextStyle(fontSize: 18,color: Colors.black,
               fontWeight: FontWeight.bold)),backgroundColor: Colors.white,
           actions: <Widget>[
@@ -36,12 +41,10 @@ class _OnBoardWidget extends State<OnBoardWidget> {
                 onClick : () {
                   Navigator.push(  context,MaterialPageRoute(
                       builder: (context) =>  AddTaskPage(),),);
-                },
-              ),
-            ],
-          ),
-        )));
-  }
+                },),], ),))
+    );
+        }
+    );}
 }
 Widget _tabSection(BuildContext context) {
   return DefaultTabController(
@@ -59,7 +62,7 @@ Widget _tabSection(BuildContext context) {
               unselectedLabelColor: Colors.grey,),    ),
         Container(height: MediaQuery.of(context).size.height,
           child: TabBarView(children: [  const  ListViewPage(),
-            Container(child: Text("2"),),
+             Text ("2"),
             Container(child: Text("3"),),
             Container(child: Text("4"),),
           ]),
@@ -71,3 +74,4 @@ Widget _tabSection(BuildContext context) {
 
 
 
+// AppBloc.get(context).gettasksData()

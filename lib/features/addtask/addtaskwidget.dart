@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:to_do/core/util/blocs/states.dart';
 //import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 import 'package:to_do/core/util/blocs/cubit.dart';
 import 'package:to_do/core/util/widgets/mybutton.dart';
@@ -16,46 +17,41 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
   List<String> repeat_all_items = ['Weekly', 'monthly', '3', '4'];
   String repeat_selectedItem = 'Weekly';
 
-  List<String> remind_all_items = ['1 day before', '1 hour before', '30 min before', '10 min before'];
+  List<String> remind_all_items = [
+    '1 day before',
+    '1 hour before',
+    '30 min before',
+    '10 min before'
+  ];
   String remind_selectedItem = '10 min before';
-
   DateTime _selectedDate = DateTime.now();
- // String starttime = "${DateTime.now().hour}".toString()+":"+"${DateTime.now().minute}" .toString();
-  String starttime = "10:10 AM";//DateFormat("hh:mm a").format(DateTime.now()).toString();
-  String endtime = "11.30 PM";
-  bool isstarttime = true;
+  String starttime = DateFormat("hh:mm a").format(DateTime.now()).toString();
+  String endtime = DateFormat("hh:mm a").format(DateTime.now()).toString();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppBloc, appstates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return
-            //  padding: EdgeInsets.all(16.0),
-               Scaffold(
-                  appBar: AppBar(
-                    title: Text(
-                      "Add Task", style: TextStyle(color: Colors.black),),
-                    backgroundColor: Colors.white,
-                    actions: <Widget>[
-                      IconButton(
-                          alignment: Alignment.topRight,
-                          icon: Icon(Icons.arrow_back_ios,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => OnBoardPage(),),);
-                          }
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  "Add Task", style: TextStyle(color: Colors.black),),
+                backgroundColor: Colors.white,
+                actions: <Widget>[
+                  IconButton(
+                      alignment: Alignment.topRight,
+                      icon: Icon(Icons.arrow_back_ios,
+                        color: Colors.black,
                       ),
-                    ],
-                  ),
-
-                  body:
-                  Container(
-                      padding: EdgeInsets.all(16.0),
-                      child:
-                  SingleChildScrollView(child: Column(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => OnBoardPage(),),);
+                      }),],
+              ),
+              body: Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
@@ -67,6 +63,9 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: TextFormField(
+                          controller: AppBloc
+                              .get(context)
+                              .titlecontroller,
                           decoration: InputDecoration(
                             hintText: 'Design Team meeting',
                             border: OutlineInputBorder(),
@@ -79,19 +78,22 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         child: Text('Date',),),
 
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-                        child: TextFormField(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 20.0),
+                        child: TextFormField(controller: AppBloc.get(context).datecontroller,
                           decoration: InputDecoration(
-                            hintText:
-                            "${_selectedDate.year}"+"/"+"${_selectedDate.month}"+"/"+"${_selectedDate.day}",
+                            hintText: "${_selectedDate.year}" + "-" + "${_selectedDate
+                           .month}" + "-" + "${_selectedDate.day}",
                             border: OutlineInputBorder(),
-                          suffixIcon:Padding (
-                            padding:  EdgeInsets.all (0.0),
-                          child : Icon ( Icons.date_range)),),
-                        onTap: (){
-                       _getDate();
-                          debugPrint ('data clicked');
-                        }, ), ),
+                            suffixIcon: Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Icon(Icons.date_range)),),
+                          onTap: () {
+                            _getDate();
+                            debugPrint('data clicked');
+                            AppBloc.get(context).datecontroller.clear();
+
+                          },),),
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -112,34 +114,40 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: Row(children: [
-                          Container(width: MediaQuery.of(context).size.width / 2.5
+                        Expanded(child :  Container(width: MediaQuery.of(context).size.width / 3
                             , child: TextFormField(
+                              controller: AppBloc
+                                  .get(context)
+                                  .starttimecontroller,
                               decoration: InputDecoration(
-                                hintText: starttime ,
+                                hintText: starttime,
                                 border: OutlineInputBorder(),
-                                suffixIcon:Padding (
-                                    padding:  EdgeInsets.all (0.0),
-                                    child : Icon ( Icons.access_alarm)),),
-                            onTap: (){
-                                isstarttime= true;
-                                _gettimeAlart();
-                            },
+                                suffixIcon: Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Icon(Icons.access_alarm)),),
+                              onTap: () {
+                                _getstarttimeAlart();
+                                AppBloc.get(context).starttimecontroller.clear();
+                              },
                             ),),
+                        ),
+                         // Spacer(),
 
-                          Spacer(flex: 1,),
-                          Container(width: MediaQuery.of(context).size.width / 2.5
-                            , child:TextFormField(
+                          Expanded(child: Container(width: MediaQuery.of(context).size.width / 3
+                            , child: TextFormField(
+                              controller: AppBloc.get(context).endtimecontroller,
                               decoration: InputDecoration(
                                 hintText: endtime,
                                 border: OutlineInputBorder(),
-                                suffixIcon:Padding (
-                                    padding:  EdgeInsets.all (0.0),
-                                    child : Icon ( Icons.access_alarm)),),
-                              onTap: (){
-                                isstarttime=false;
-                                _gettimeAlart();},
-                            ),),
-                            ],),),
+                                suffixIcon: Padding(
+                                    padding: EdgeInsets.all(0.0),
+                                    child: Icon(Icons.access_alarm)),),
+                              onTap: () {
+                                _getendtimeAlart();
+                                AppBloc.get(context).endtimecontroller.clear();
+                              },
+                            ),),)
+                        ],),),
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -147,19 +155,20 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         child: Text('Remind',),),
 
                       Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: DropdownButton(
-                          // decoration:  InputDecoration(enabledBorder: OutlineInputBorder(
-                          // borderRadius: BorderRadius.circular(16),
-                          //  borderSide: BorderSide(width: 3,color: Colors.)
-
                           value: remind_selectedItem,
-                          items: remind_all_items.map((item) => DropdownMenuItem(
-                            child: Text(item,), value: item,)).toList(),
+                          items: remind_all_items.map((item) =>
+                              DropdownMenuItem(
+                                child: Text(item,), value: item,)).toList(),
                           onChanged: (value) =>
-                              setState(() => remind_selectedItem = value.toString()),
+                            setState(() =>
+                              remind_selectedItem = value.toString()),
                         )
                         ,),
 
@@ -169,19 +178,20 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         child: Text('Repeat',),),
 
                       Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width,
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: DropdownButton(
-                          // decoration:  InputDecoration(enabledBorder: OutlineInputBorder(
-                          // borderRadius: BorderRadius.circular(16),
-                          //  borderSide: BorderSide(width: 3,color: Colors.)
-
                           value: repeat_selectedItem,
-                          items: repeat_all_items.map((item) => DropdownMenuItem(
-                            child: Text(item,), value: item,)).toList(),
+                          items: repeat_all_items.map((item) =>
+                              DropdownMenuItem(
+                                child: Text(item,), value: item,)).toList(),
                           onChanged: (value) =>
-                              setState(() => repeat_selectedItem = value.toString()),
+                              setState(() =>
+                              repeat_selectedItem = value.toString()),
                         )
                         ,),
 
@@ -189,58 +199,93 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                         margin: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         child: MyButton(text: 'Create a Task',
+                          // controller: AppBloc.get(context).usernameController,
+
                           onClick: () {
                             AppBloc.get(context).inserttaskData();
-//ScaffoldMessenger.of(context).showSnackBar(snackBar(content:const Text ('hhh')));
-                           // Navigator.push(context, MaterialPageRoute(
-                         //     builder: (context) => OnBoardPage(),),);
+                            debugPrint('${AppBloc
+                                .get(context)
+                                .titlecontroller
+                                .text}${AppBloc
+                                .get(context)
+                                .datecontroller
+                                .text}'
+                                '${AppBloc
+                                .get(context)
+                                .starttimecontroller
+                                .text}${AppBloc
+                                .get(context)
+                                .endtimecontroller
+                                .text}56');
+
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => OnBoardPage(),),);
                           },
-                        ),),],     ),
+                        ),),
+                    ],),
                   )));
         }
 
     );
   }
 
-   _getDate()   async{
-    DateTime? time = await  showDatePicker(context: context,
+  _getDate() async {
+    DateTime? datetime = await showDatePicker(context: context,
         initialDate: _selectedDate,
-        firstDate: DateTime(2000), lastDate: DateTime(2121));
-       if (time !=null){
-       //  AppBloc.get(context).inserttaskData();
-         setState(() {
-           _selectedDate = time;
-           print("choosing a date correctly");
-         });
-       }
-       else {
-         print("error choosing a date");
-
-       }
+        firstDate: DateTime(2000), lastDate: DateTime(2121)).then((value) {
+      AppBloc.get(context).datecontroller.text = DateFormat("y-M-d").format(value!);
+    });
+    if (datetime != null) {
+       _selectedDate = datetime;
+      print("choosing a date correctly");
+    }
+    else {
+      print("error choosing a date");
+    }
   }
 
-  _gettimeAlart() async {
-    var pickedTime  = await showTimePicker(
+
+  _getstarttimeAlart() async {
+    var pickedTime = await showTimePicker(
         initialEntryMode: TimePickerEntryMode.input,
         context: context,
-        initialTime: TimeOfDay(hour: 9, minute: 10)
-    );
+      initialTime: TimeOfDay.now(),
+    ).then((value) {
+      AppBloc
+          .get(context)
+          .starttimecontroller
+          .text = value!.format(context);
+    });
     String format_time = pickedTime!.format(context);
     if (pickedTime == null) {
       debugPrint("please choose time");
-    } else if (isstarttime == true) {
-      setState(() {
-        starttime = format_time;
-        debugPrint("start time");
-      });
     }
-    else if (isstarttime == false) {
-        setState(() {
-          endtime = format_time;
-          debugPrint("endtime");
-        });
-      };
+    starttime= format_time;
+    debugPrint("start time");
   }
+
+  _getendtimeAlart() async {
+    var pickedTime = await showTimePicker(
+        initialEntryMode: TimePickerEntryMode.input,
+        context: context,
+        initialTime: TimeOfDay.now(),
+    ).then((value) {
+      AppBloc
+          .get(context)
+          .endtimecontroller
+          .text = value!.format(context);
+    });
+    String format_time = pickedTime!.format(context);
+    if (pickedTime == null) {
+      debugPrint("please choose time");
+    }
+    endtime= format_time;
+    debugPrint("end time");
+  }
+
+
+
+
 }
 
 
