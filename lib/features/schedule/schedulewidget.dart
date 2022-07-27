@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
-import 'package:to_do/core/util/widgets/listviewpage.dart';
+import 'package:to_do/core/util/blocs/cubit.dart';
+import 'package:to_do/core/util/widgets/task.dart';
 import 'package:to_do/features/onboard/onboardpage';
 import 'package:intl/intl.dart';
-
 
 
 class schedulWidget extends StatefulWidget {
@@ -42,6 +42,8 @@ class _schedulWidget  extends State<schedulWidget> {
               onDateChange: (date) {
                 setState(() {
                   _selectedValue = date;
+                  print(_selectedValue.toString());
+
                 });
               },
             )),
@@ -58,9 +60,87 @@ class _schedulWidget  extends State<schedulWidget> {
 
            Container(
              margin : EdgeInsets.all(20.0),
-             height: MediaQuery.of(context).size.height,
-              child: const ListViewPage(),
-            )
+             height: MediaQuery.of(context).
+             size.height,
+           //   child: const ListViewPage(),
+             child: ListView.builder(
+               itemCount:   AppBloc.get(context).tasks.length,
+                 itemBuilder: (context,index) {
+                   print(AppBloc.get(context).tasks.length);
+
+                //   Task task = AppBloc().tasks!index];
+                   // print(task.toString());
+                   /*  return Container(
+                     width: 100,
+                     height: 50,
+                     color: Colors.green,
+                     margin: EdgeInsets.only(bottom: 20.0),
+                     child: Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         Container(
+                           margin: EdgeInsets.only(left: 5.0),
+
+                           child: Text(AppBloc
+                               .get(context)
+                               .tasks[index]["starttime"], style: TextStyle(
+                               fontSize: 20, color: Colors.white),),),
+                         Container(margin: EdgeInsets.only(left: 5.0),
+                           child: Text(AppBloc
+                               .get(context)
+                               .tasks[index]["title"], style: TextStyle(
+                               fontSize: 15, color: Colors.white),),),
+                       ],),
+                   );*/
+
+              if (AppBloc.get(context).tasks[index]['repeat'] == 'Daily') {
+                     return Container(
+                       width: 100,
+                       height: 50,
+                       color: Colors.green,
+                       margin: EdgeInsets.only(bottom: 20.0),
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: [
+                           Container(
+                             margin: EdgeInsets.only(left: 5.0),
+                             child: Text(AppBloc
+                                 .get(context)
+                                 .tasks[index]["starttime"], style: TextStyle(
+                                 fontSize: 20, color: Colors.white),),),
+                           Container(margin: EdgeInsets.only(left: 5.0),
+                             child: Text(AppBloc
+                                 .get(context)
+                                 .tasks[index]["title"], style: TextStyle(
+                                 fontSize: 15, color: Colors.white),),),
+                         ],),
+                     );
+                  // }
+                 }
+                if (AppBloc.get(context).tasks[index]['date']==DateFormat.yMd().format(_selectedValue)){
+                  return  Container(
+                    width: 100,
+                    height: 50,
+                    color: Colors.green,
+                    margin : EdgeInsets.only(bottom:  20.0),
+                    child: Column (
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin : EdgeInsets.only( left:  5.0),
+
+                          child :  Text(AppBloc.get(context).tasks[index]["starttime"],style: TextStyle(fontSize: 20,color: Colors.white),),),
+                        Container( margin : EdgeInsets.only( left: 5.0),
+                          child :  Text(AppBloc.get(context).tasks[index]["title"],style: TextStyle(fontSize:15,color: Colors.white),),),
+                      ],),
+                  );
+                }
+                else {
+                  return Container();
+                    }
+               }
+    )),
+
           ],
         )
     ))

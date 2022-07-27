@@ -37,8 +37,7 @@ class _OnBoardWidget extends State<OnBoardWidget> {
             child: SingleChildScrollView(
           child: Column(  children: <Widget>[
               _tabSection(context),
-              MyButton(text : 'Add a Task',
-                onClick : () {
+              MyButton(text : 'Add a Task', onClick : () {
                   Navigator.push(  context,MaterialPageRoute(
                       builder: (context) =>  AddTaskPage(),),);
                 },),], ),))
@@ -46,11 +45,13 @@ class _OnBoardWidget extends State<OnBoardWidget> {
         }
     );}
 }
+bool _checkboxListTile = false;
+
 Widget _tabSection(BuildContext context) {
   return DefaultTabController(
     length: 4,
     child: Column(
-      mainAxisSize: MainAxisSize.min,
+    //  mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
           child: TabBar(tabs: [
@@ -61,8 +62,21 @@ Widget _tabSection(BuildContext context) {
           ],   labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,),    ),
         Container(height: MediaQuery.of(context).size.height,
-          child: TabBarView(children: [  const  ListViewPage(),
-             Text ("2"),
+          child: TabBarView(children: [
+           // const  ListViewPage(),
+
+            Container(child: ListView.builder(
+  itemCount:   AppBloc.get(context).tasks.length,
+  itemBuilder: (context,index){
+  return  Container(  width: 100,  height: 50,  color: Colors.green,
+  margin : EdgeInsets.only(bottom:  20.0),
+  child: Column (  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+  Container( margin : EdgeInsets.only( left: 5.0),
+  child :  Text(AppBloc.get(context).tasks[index]["title"],style: TextStyle(fontSize:15,color: Colors.white),),),
+  ],),  );
+  }  )),
+            Container(child: Text("2"),),
             Container(child: Text("3"),),
             Container(child: Text("4"),),
           ]),

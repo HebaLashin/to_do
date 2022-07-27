@@ -48,15 +48,19 @@ class AppBloc extends Cubit<appstates> {
   TextEditingController datecontroller = TextEditingController();
   TextEditingController starttimecontroller = TextEditingController();
   TextEditingController endtimecontroller = TextEditingController();
+  TextEditingController remindcontroller = TextEditingController();
+  TextEditingController repeatcontroller = TextEditingController();
+
   void inserttaskData() async {
     await database.transaction((txn) async {
       await txn.rawInsert(
           'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("${titlecontroller.text}","${datecontroller.text}",'
-              '"${starttimecontroller.text}","${endtimecontroller.text}","5","6")');
+              '"${starttimecontroller.text}","${endtimecontroller.text}","${remindcontroller.text}","${repeatcontroller.text}")');
      // 'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("1","2","3","4","5","6")');
 
       /*
           'INSERT INTO task(title,date,starttime,endtime,remind,repeat) VALUES("${usernameController.text},'
+
           '${usernameController.text},'
           ''${usernameController.text},
           '${usernameController.text},'
@@ -80,4 +84,16 @@ class AppBloc extends Cubit<appstates> {
     return tasks;
 
   }
+
+
+  List<Map> taskswithspecificDay = [];
+  Future<List<Map>> gettaskswithspecificDay(DateTime datetime)async{
+      taskswithspecificDay = await database.rawQuery('SELECT * FROM task WHERE date = "${datetime}"');
+      emit(appDatabasespecificDay());
+      debugPrint('appDatabasespecificDay');
+      return taskswithspecificDay;
+
+    }
+
+
 }

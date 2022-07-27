@@ -11,3 +11,5 @@ class appdatabasetablecreated extends appstates{}
 class appdatabasetaskcreated extends appstates{}
 
 class appDatabasetasks extends appstates{}
+
+class appDatabasespecificDay extends appstates{}

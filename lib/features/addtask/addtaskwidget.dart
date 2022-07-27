@@ -154,11 +154,7 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                             vertical: 5.0, horizontal: 20.0),
                         child: Text('Remind',),),
 
-                      Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
+                  /*    Container(width: MediaQuery.of(context) .size.width,
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: DropdownButton(
@@ -171,29 +167,55 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                               remind_selectedItem = value.toString()),
                         )
                         ,),
+*/
+
+                      Container(width: MediaQuery.of(context) .size.width,
+                        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                         child :  TextFormField(controller: AppBloc.get(context).remindcontroller,
+                          decoration: InputDecoration(
+                          //  hintText: remind_selectedItem,
+                            border: OutlineInputBorder(),
+                            suffixIcon: DropdownButton(
+                              value: remind_selectedItem,
+                           items: remind_all_items.map((item) =>
+                               DropdownMenuItem(
+                                 child: Text(item,), value: item,)).toList(),
+                           onChanged: (value){
+                               setState((){
+                               remind_selectedItem = value.toString();
+                               });
+                               AppBloc.get(context).remindcontroller.text= value.toString();
+                           },
+                            ),
+                          )
+                           ),),
 
                       Container(
                         margin: EdgeInsets.symmetric(
                             vertical: 5.0, horizontal: 20.0),
                         child: Text('Repeat',),),
 
-                      Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 20.0),
-                        child: DropdownButton(
+                  Container(width: MediaQuery.of(context) .size.width,
+                    margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                    child :  TextFormField(controller: AppBloc.get(context).repeatcontroller,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        suffixIcon: DropdownButton(
                           value: repeat_selectedItem,
                           items: repeat_all_items.map((item) =>
                               DropdownMenuItem(
                                 child: Text(item,), value: item,)).toList(),
-                          onChanged: (value) =>
-                              setState(() =>
-                              repeat_selectedItem = value.toString()),
-                        )
-                        ,),
+                          onChanged: (value) {
+                            setState((){
+                              repeat_selectedItem = value.toString();
+                            });
+                            AppBloc.get(context).repeatcontroller.text= value.toString();
+                          },
+
+
+                        ),
+                      )
+                    ),),
 
                       Container(
                         margin: EdgeInsets.symmetric(
@@ -216,7 +238,13 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
                                 .text}${AppBloc
                                 .get(context)
                                 .endtimecontroller
-                                .text}56');
+                                .text}${AppBloc
+                                .get(context)
+                                .remindcontroller
+                                .text}${AppBloc
+                                .get(context)
+                                .repeatcontroller
+                                .text}');
 
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) => OnBoardPage(),),);
@@ -243,7 +271,6 @@ class _AddTaskWidget  extends State<AddTaskWidget> {
       print("error choosing a date");
     }
   }
-
 
   _getstarttimeAlart() async {
     var pickedTime = await showTimePicker(
